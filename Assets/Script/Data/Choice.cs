@@ -1,18 +1,15 @@
 ﻿using System;
-using Script.Component;
-using UnityEngine;
 
 namespace Script.Data {
     [Serializable]
-    public class Choice : ScriptableObject {
+    public class Choice {
 
         public string Description;
         public Thumbnail Link;
-        
-        public void Build(ChoiceUiComponent choiceUiComponent)
-        {
-            Description = choiceUiComponent.DescriptionInputField.text;
-            Link = choiceUiComponent.GetThumbnailForDropdown();
+
+        public Choice(string description, Thumbnail link) {
+            Description = description;
+            Link = link;
         }
 
     }
