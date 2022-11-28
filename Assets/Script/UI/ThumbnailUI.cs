@@ -1,25 +1,40 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Script.Data;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Script.UI {
     public class ThumbnailUI : MonoBehaviour {
 
-        [SerializeField] private InputField TitleInputField;
-        [SerializeField] private InputField DescriptionInputField;
-        [SerializeField] private Dropdown ThumbnailSelectorDropdown;
+        [SerializeField] private TMP_InputField TitleInputField;
+        [SerializeField] private TMP_InputField DescriptionInputField;
+        [SerializeField] private TMP_Dropdown ThumbnailSelectorDropdown;
         [SerializeField] private List<ChoiceUI> ChoiceUiComponents = new List<ChoiceUI>();
         [SerializeField] private Transform ChoiceContent;
         [SerializeField] private GameObject ChoicePrefab;
-        [SerializeField] private Story CurrentStory;
 
+        private Story CurrentStory => StoryUI.CurrentStory;
+
+        private string _guid = Guid.NewGuid().ToString();
+
+        public void New() {
+            Save();
+            _guid = Guid.NewGuid().ToString();
+            TitleInputField.text = string.Empty;
+            DescriptionInputField.text = string.Empty;
+            ChoiceUiComponents.ForEach(component => Destroy(component.gameObject));
+            ChoiceUiComponents = new List<ChoiceUI>();
+            UpdateThumbnailDropdown();
+        }
+        
         public void Load(int index) {
+            Save();
             Thumbnail thumbnail = CurrentStory.Thumbnails[index];
+            _guid = thumbnail.Guid;
             TitleInputField.text = thumbnail.Title;
             DescriptionInputField.text = thumbnail.Description;
-            UpdateThumbnailDropdown();
             foreach (Choice choice in thumbnail.Choices) {
                 GameObject instantiate = Instantiate(ChoicePrefab, ChoiceContent);
                 ChoiceUI choiceUI = instantiate.GetComponent<ChoiceUI>();
@@ -31,44 +46,34 @@ namespace Script.UI {
         public void Save() {
             if (TitleInputField.text == string.Empty) return;
             Thumbnail thumbnail = ToThumbnail();
-            Thumbnail find = CurrentStory.Thumbnails.Find(existingThumbnail => existingThumbnail.Title == thumbnail.Title);
-            if (find != null) {
+            Thumbnail find = CurrentStory.Thumbnails.Find(existingThumbnail => existingThumbnail.Guid == thumbnail.Guid);
+            if (find == null) {
+                CurrentStory.Thumbnails.Add(thumbnail);
+            }
+            else {
                 find.Title = thumbnail.Title;
                 find.Description = thumbnail.Description;
                 find.Choices = thumbnail.Choices;
             }
-            else {
-                CurrentStory.Thumbnails.Add(thumbnail);
-            }
-            Reset();
-            UpdateThumbnailDropdown();
         }
         
         public void Delete() {
-            Thumbnail find = CurrentStory.Thumbnails.Find(existingThumbnail => existingThumbnail.Title == TitleInputField.text);
-            if (find != null)
-                CurrentStory.Thumbnails.Remove(find);
+            Thumbnail find = CurrentStory.Thumbnails.Find(existingThumbnail => existingThumbnail.Guid == _guid);
+            if (find != null) CurrentStory.Thumbnails.Remove(find);
         }
 
         public Thumbnail ToThumbnail() {
-            return new Thumbnail
-            {
+            return new Thumbnail {
+                Guid = _guid,
                 Title = TitleInputField.text,
                 Description = DescriptionInputField.text,
                 Choices = ChoiceUiComponents.Select(ui => ui.ToChoice()).ToList()
             };
         }
-        
-        public void Reset() {
-            TitleInputField.text = string.Empty;
-            DescriptionInputField.text = string.Empty;
-            ChoiceUiComponents.ForEach(component => Destroy(component.gameObject));
-            ChoiceUiComponents = new List<ChoiceUI>();
-        }
-        
+
         public void UpdateThumbnailDropdown() {
             ThumbnailSelectorDropdown.ClearOptions();
-            CurrentStory.Thumbnails.ForEach(thumbnail => ThumbnailSelectorDropdown.options.Add(new Dropdown.OptionData(thumbnail.Title)));
+            CurrentStory.Thumbnails.ForEach(thumbnail => ThumbnailSelectorDropdown.options.Add(new TMP_Dropdown.OptionData(thumbnail.Title)));
             ChoiceUiComponents.ForEach(component => component.UpdateThumbnailDropdown());
             ThumbnailSelectorDropdown.interactable = CurrentStory.Thumbnails.Count != 0;
         }

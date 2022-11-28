@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using Script.Data;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.UI {
     public class ChoiceUI : MonoBehaviour {
 
-        [FormerlySerializedAs("DescriptionInputField")] [SerializeField] private InputField _descriptionInputField;
-        [FormerlySerializedAs("LinkThumbnailDropdown")] [SerializeField] private Dropdown _linkThumbnailDropdown;
-        [FormerlySerializedAs("ThumbnailUiComponent")] [SerializeField] private ThumbnailUI _thumbnailUI;
+        [SerializeField] private InputField _descriptionInputField;
+        [SerializeField] private Dropdown _linkThumbnailDropdown;
+        [SerializeField] private ThumbnailUI _thumbnailUI;
 
         public void Build(ThumbnailUI thumbnailUI) {
             _thumbnailUI = thumbnailUI;

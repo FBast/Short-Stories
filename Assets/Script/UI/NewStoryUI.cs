@@ -1,25 +1,19 @@
 ﻿using Script.Data;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Script.UI {
     public class NewStoryUI : MonoBehaviour {
-
-        [SerializeField] private GameObject _newStoryPanel;
-        [SerializeField] private CanvasGroup _overlayCanvasGroup;
-        [SerializeField] private InputField _storyNameInputField;
+        
+        [SerializeField] private TMP_InputField _storyNameInputField;
         
         public void Confirm() {
-            StoryUI.CurrentStory = new Story {
-                StoryName = _storyNameInputField.text
-            };
-            _newStoryPanel.SetActive(false);
-            _overlayCanvasGroup.interactable = true;
+            StoryUI.CurrentStory = new Story(_storyNameInputField.text);
+            gameObject.SetActive(false);
         }
 
         public void Cancel() {
-            _newStoryPanel.SetActive(false);
-            _overlayCanvasGroup.interactable = true;
+            gameObject.SetActive(false);
         }
         
     }

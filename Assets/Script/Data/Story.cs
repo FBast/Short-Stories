@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Script.Data {
     [Serializable]
@@ -9,5 +8,10 @@ namespace Script.Data {
         public string StoryName;
         public List<Thumbnail> Thumbnails;
 
+        public Story(string storyName) {
+            StoryName = storyName;
+            Thumbnails = new List<Thumbnail>();
+        }
+        
     }
 }

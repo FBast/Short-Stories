@@ -12,7 +12,7 @@ namespace Script.Managers {
         
         private static readonly fsSerializer Serializer = new fsSerializer();
         private static readonly string StoryPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Stories";
-        
+
         public static void SaveStory(Story story) {
             string path = StoryPath + Path.DirectorySeparatorChar + story.StoryName + Properties.File.StoryExt;
             if (!File.Exists(path))
@@ -36,7 +36,7 @@ namespace Script.Managers {
         }
 
         public static List<string> ListStories() {
-            return Directory.GetFiles(Application.persistentDataPath, "*" + Properties.File.StoryExt)
+            return Directory.GetFiles(StoryPath, "*" + Properties.File.StoryExt)
                 .Select(Path.GetFileName)
                 .ToList();
         }
