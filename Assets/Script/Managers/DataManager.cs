@@ -11,15 +11,14 @@ namespace Script.Managers {
     public static class DataManager {
         
         private static readonly fsSerializer Serializer = new fsSerializer();
-        private static readonly string StoryPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Stories";
+        private static readonly string StoryPath = Application.streamingAssetsPath;
 
         public static List<string> StoryFiles => Directory.GetFiles(StoryPath, "*" + Properties.File.StoryExt)
                 .Select(Path.GetFileName).ToList();
 
         public static void SaveStory(Story story) {
             string path = StoryPath + Path.DirectorySeparatorChar + story.StoryName + Properties.File.StoryExt;
-            if (!File.Exists(path))
-            {
+            if (!File.Exists(path)) {
                 FileStream fileStream = File.Create(path);
                 fileStream.Close();
             }
@@ -30,12 +29,14 @@ namespace Script.Managers {
         public static Story LoadStory(string storyNameWithExtension) {
             string path = StoryPath + Path.DirectorySeparatorChar + storyNameWithExtension;
             if(File.Exists(path)) File.OpenRead(path);
-            else {
-                Debug.LogError("File not found");
-                return null;
-            }
+            else Debug.LogError("File not found");
             string fileJson = File.ReadAllText(path);
             return Deserialize(typeof(Story), fileJson) as Story;
+        }
+
+        public static bool CheckStory(string storyNameWithExtension) {
+            string path = StoryPath + Path.DirectorySeparatorChar + storyNameWithExtension;
+            return File.Exists(path);
         }
         
         private static string Serialize(Type type, object value) {

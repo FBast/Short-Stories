@@ -37,6 +37,14 @@
   }
 }</component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$USER_HOME$/Desktop/Build Short-Stories\Short Stories.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\f.bast\Desktop\Build Short-Stories" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
     <configuration name="UnitTests (batch mode)" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2021.3.11f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;C:\Users\f.bast\Local Repository\Short-Stories&quot; -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
@@ -76,7 +84,7 @@
       <updated>1669388061021</updated>
       <workItem from="1669388068842" duration="3862000" />
       <workItem from="1669639908896" duration="7491000" />
-      <workItem from="1669719437492" duration="9534000" />
+      <workItem from="1669719437492" duration="11222000" />
     </task>
     <servers />
   </component>
