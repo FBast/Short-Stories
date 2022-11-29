@@ -13,6 +13,9 @@ namespace Script.Managers {
         private static readonly fsSerializer Serializer = new fsSerializer();
         private static readonly string StoryPath = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "Stories";
 
+        public static List<string> StoryFiles => Directory.GetFiles(StoryPath, "*" + Properties.File.StoryExt)
+                .Select(Path.GetFileName).ToList();
+
         public static void SaveStory(Story story) {
             string path = StoryPath + Path.DirectorySeparatorChar + story.StoryName + Properties.File.StoryExt;
             if (!File.Exists(path))
@@ -33,12 +36,6 @@ namespace Script.Managers {
             }
             string fileJson = File.ReadAllText(path);
             return Deserialize(typeof(Story), fileJson) as Story;
-        }
-
-        public static List<string> ListStories() {
-            return Directory.GetFiles(StoryPath, "*" + Properties.File.StoryExt)
-                .Select(Path.GetFileName)
-                .ToList();
         }
         
         private static string Serialize(Type type, object value) {

@@ -12,24 +12,35 @@ namespace Script.UI {
         [SerializeField] private GameObject _newStoryCanvas;
 
         private void Start() {
-            // Load Story from Prefs
+            // Loaded Story
             if (PlayerPrefs.HasKey(Properties.Prefs.LoadedStory)) {
-                LoadStory(PlayerPrefs.GetString(Properties.Prefs.LoadedStory));
+                Load(PlayerPrefs.GetString(Properties.Prefs.LoadedStory));
                 PlayerPrefs.DeleteKey(Properties.Prefs.LoadedStory);
                 _thumbnailUI.UpdateThumbnailDropdown();
             }
-            // Create new Story
+            // Last Loaded Story
+            else if (PlayerPrefs.HasKey(Properties.Prefs.LastStory)) {
+                Load(PlayerPrefs.GetString(Properties.Prefs.LastStory));
+                _thumbnailUI.UpdateThumbnailDropdown();
+            }
+            // Force create new Story
             else {
                 _newStoryCanvas.SetActive(true);
             }
         }
 
-        public void SaveStory() {
+        /// <summary>
+        /// Save the current story
+        /// </summary>
+        public void Save() {
             _thumbnailUI.Save();
             DataManager.SaveStory(CurrentStory);
         }
         
-        private void LoadStory(string storyName) {
+        /// <summary>
+        /// Load an existing story
+        /// </summary>
+        private void Load(string storyName) {
             CurrentStory = DataManager.LoadStory(storyName);
             if (CurrentStory == null) {
                 _newStoryCanvas.SetActive(true);
@@ -37,8 +48,12 @@ namespace Script.UI {
             else {
                 _thumbnailUI.Load(0);
             }
+            PlayerPrefs.SetString(Properties.Prefs.LastStory, storyName);
         }
         
+        /// <summary>
+        /// Quit the application
+        /// </summary>
         public void Exit() {
             Application.Quit();
         }

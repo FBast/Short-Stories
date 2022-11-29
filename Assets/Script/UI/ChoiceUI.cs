@@ -1,42 +1,50 @@
 ﻿using System.Collections.Generic;
 using Script.Data;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.Serialization;
 
 namespace Script.UI {
     public class ChoiceUI : MonoBehaviour {
 
-        [SerializeField] private InputField _descriptionInputField;
-        [SerializeField] private Dropdown _linkThumbnailDropdown;
-        [SerializeField] private ThumbnailUI _thumbnailUI;
+        [SerializeField] private TMP_InputField _descriptionInputField;
+        [FormerlySerializedAs("_linkThumbnailDropdown")] [SerializeField] private TMP_Dropdown _linkedThumbnailDropdown;
 
-        public void Build(ThumbnailUI thumbnailUI) {
-            _thumbnailUI = thumbnailUI;
-        }
-        
-        public void Load(ThumbnailUI thumbnailUI, Choice choice) {
-            _thumbnailUI = thumbnailUI;
+        /// <summary>
+        /// Load an existing choice
+        /// </summary>
+        /// <param name="choice"></param>
+        public void Load(Choice choice) {
+            UpdateLinkedThumbnailDropdown();
             _descriptionInputField.text = choice.Description;
-            _linkThumbnailDropdown.value = StoryUI.CurrentStory.Thumbnails.IndexOf(choice.Link);
+            _linkedThumbnailDropdown.value = StoryUI.CurrentStory.Thumbnails.IndexOf(choice.Link);
         }
 
+        /// <summary>
+        /// Convert the ChoiceUI into Choice
+        /// </summary>
+        /// <returns></returns>
         public Choice ToChoice() {
-            return new Choice(_descriptionInputField.text, GetThumbnailForDropdown());
+            return _linkedThumbnailDropdown.value < StoryUI.CurrentStory.Thumbnails.Count ? 
+                new Choice(_descriptionInputField.text, StoryUI.CurrentStory.Thumbnails[_linkedThumbnailDropdown.value]) : 
+                new Choice(_descriptionInputField.text, null);
         }
         
-        public void UpdateThumbnailDropdown() {
-            _linkThumbnailDropdown.options = new List<Dropdown.OptionData>();
+        /// <summary>
+        /// Update the content of the linked thumbnail dropdown
+        /// </summary>
+        public void UpdateLinkedThumbnailDropdown() {
+            _linkedThumbnailDropdown.options = new List<TMP_Dropdown.OptionData>();
             foreach (Thumbnail thumbnail in StoryUI.CurrentStory.Thumbnails) {
-                _linkThumbnailDropdown.options.Add(new Dropdown.OptionData(thumbnail.Title));
+                _linkedThumbnailDropdown.options.Add(new TMP_Dropdown.OptionData(thumbnail.Title));
             }
         }
 
+        /// <summary>
+        /// Destroy the current choice
+        /// </summary>
         public void RemoveChoice() {
-            _thumbnailUI.RemoveChoice(this);
-        }
-        
-        public Thumbnail GetThumbnailForDropdown() {
-            return StoryUI.CurrentStory.Thumbnails[_linkThumbnailDropdown.value];
+            Destroy(gameObject);
         }
 
     }

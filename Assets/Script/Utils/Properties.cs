@@ -12,6 +12,7 @@
         public struct Prefs
         {
             public const string LoadedStory = "LoadedStory";
+            public const string LastStory = "LastStory";
         }
 
         public struct File

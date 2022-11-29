@@ -11,26 +11,40 @@ namespace Script.UI {
         [SerializeField] private TMP_InputField TitleInputField;
         [SerializeField] private TMP_InputField DescriptionInputField;
         [SerializeField] private TMP_Dropdown ThumbnailSelectorDropdown;
-        [SerializeField] private List<ChoiceUI> ChoiceUiComponents = new List<ChoiceUI>();
         [SerializeField] private Transform ChoiceContent;
         [SerializeField] private GameObject ChoicePrefab;
 
+        private string _guid = Guid.NewGuid().ToString();
+        
+        private List<ChoiceUI> ChoiceUIs => ChoiceContent.GetComponentsInChildren<ChoiceUI>().ToList();
         private Story CurrentStory => StoryUI.CurrentStory;
 
-        private string _guid = Guid.NewGuid().ToString();
-
-        public void New() {
-            Save();
+        /// <summary>
+        /// Reset the thumbnailUI values
+        /// </summary>
+        public void Reset() {
             _guid = Guid.NewGuid().ToString();
             TitleInputField.text = string.Empty;
             DescriptionInputField.text = string.Empty;
-            ChoiceUiComponents.ForEach(component => Destroy(component.gameObject));
-            ChoiceUiComponents = new List<ChoiceUI>();
+            ChoiceUIs.ForEach(component => Destroy(component.gameObject));
+        }
+        
+        /// <summary>
+        /// Create a new thumbnail
+        /// </summary>
+        public void New() {
+            Save();
+            Reset();
             UpdateThumbnailDropdown();
         }
         
+        /// <summary>
+        /// Load an existing thumbnail using dropdown thumbnail
+        /// </summary>
+        /// <param name="index"></param>
         public void Load(int index) {
             Save();
+            Reset();
             Thumbnail thumbnail = CurrentStory.Thumbnails[index];
             _guid = thumbnail.Guid;
             TitleInputField.text = thumbnail.Title;
@@ -38,11 +52,13 @@ namespace Script.UI {
             foreach (Choice choice in thumbnail.Choices) {
                 GameObject instantiate = Instantiate(ChoicePrefab, ChoiceContent);
                 ChoiceUI choiceUI = instantiate.GetComponent<ChoiceUI>();
-                choiceUI.Load(this, choice);
-                ChoiceUiComponents.Add(choiceUI);
+                choiceUI.Load(choice);
             }
         }
         
+        /// <summary>
+        /// Save the current thumbnail using the same guid as id
+        /// </summary>
         public void Save() {
             if (TitleInputField.text == string.Empty) return;
             Thumbnail thumbnail = ToThumbnail();
@@ -57,38 +73,45 @@ namespace Script.UI {
             }
         }
         
+        /// <summary>
+        /// Delete the current thumbnail
+        /// </summary>
         public void Delete() {
             Thumbnail find = CurrentStory.Thumbnails.Find(existingThumbnail => existingThumbnail.Guid == _guid);
             if (find != null) CurrentStory.Thumbnails.Remove(find);
         }
 
+        /// <summary>
+        /// Convert the ThumbnailUI into Thumbnail
+        /// </summary>
+        /// <returns></returns>
         public Thumbnail ToThumbnail() {
             return new Thumbnail {
                 Guid = _guid,
                 Title = TitleInputField.text,
                 Description = DescriptionInputField.text,
-                Choices = ChoiceUiComponents.Select(ui => ui.ToChoice()).ToList()
+                Choices = ChoiceUIs.Select(ui => ui.ToChoice()).ToList()
             };
         }
 
+        /// <summary>
+        /// Update the content of the thumbnails dropdown
+        /// </summary>
         public void UpdateThumbnailDropdown() {
             ThumbnailSelectorDropdown.ClearOptions();
             CurrentStory.Thumbnails.ForEach(thumbnail => ThumbnailSelectorDropdown.options.Add(new TMP_Dropdown.OptionData(thumbnail.Title)));
-            ChoiceUiComponents.ForEach(component => component.UpdateThumbnailDropdown());
+            ChoiceUIs.ForEach(component => component.UpdateLinkedThumbnailDropdown());
             ThumbnailSelectorDropdown.interactable = CurrentStory.Thumbnails.Count != 0;
         }
         
+        /// <summary>
+        /// Add a new choice on the current thumbnail
+        /// </summary>
         public void AddChoice() {
             GameObject instantiate = Instantiate(ChoicePrefab, ChoiceContent);
             ChoiceUI choiceUI = instantiate.GetComponent<ChoiceUI>();
-            choiceUI.Build(this);
-            ChoiceUiComponents.Add(choiceUI);
+            choiceUI.UpdateLinkedThumbnailDropdown();
         }
-        
-        public void RemoveChoice(ChoiceUI choiceUI) {
-            ChoiceUiComponents.Remove(choiceUI);
-            Destroy(choiceUI.gameObject);
-        }
-        
+
     }
 }
