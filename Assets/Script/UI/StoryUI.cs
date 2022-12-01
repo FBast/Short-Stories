@@ -31,6 +31,14 @@ namespace Script.UI {
         }
 
         /// <summary>
+        /// Create a new story
+        /// </summary>
+        public void New(string storyName) {
+            CurrentStory = new Story(storyName);
+            _thumbnailUI.Reset();
+        }
+        
+        /// <summary>
         /// Save the current story
         /// </summary>
         public void Save() {

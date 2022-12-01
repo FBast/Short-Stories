@@ -7081,6 +7081,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5b2f8379ea04e03972ae81910b4f34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _storyUI: {fileID: 924948846}
   _storyNameInputField: {fileID: 1138851842}
   _cancelButton: {fileID: 1083837527}
 --- !u!1 &1813752525

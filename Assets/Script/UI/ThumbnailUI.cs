@@ -28,7 +28,7 @@ namespace Script.UI {
             DescriptionInputField.text = string.Empty;
             ChoiceUIs.ForEach(component => Destroy(component.gameObject));
         }
-        
+
         /// <summary>
         /// Create a new thumbnail
         /// </summary>

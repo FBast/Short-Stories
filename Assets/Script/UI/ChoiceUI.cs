@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using Script.Data;
 using TMPro;
 using UnityEngine;
@@ -17,7 +18,15 @@ namespace Script.UI {
         public void Load(Choice choice) {
             UpdateLinkedThumbnailDropdown();
             _descriptionInputField.text = choice.Description;
-            _linkedThumbnailDropdown.value = StoryUI.CurrentStory.Thumbnails.IndexOf(choice.Link);
+            if (choice.ThumbnailGuid == string.Empty) {
+                _linkedThumbnailDropdown.value = 0;
+            }
+            else {
+                Thumbnail firstOrDefault = StoryUI.CurrentStory.Thumbnails.FirstOrDefault(thumbnail => thumbnail.Guid == choice.ThumbnailGuid);
+                if (firstOrDefault == null)
+                    throw new Exception("Cannot find any thumbnail with guid " + choice.ThumbnailGuid);
+                _linkedThumbnailDropdown.value = StoryUI.CurrentStory.Thumbnails.IndexOf(firstOrDefault);
+            }
         }
 
         /// <summary>
@@ -25,16 +34,16 @@ namespace Script.UI {
         /// </summary>
         /// <returns></returns>
         public Choice ToChoice() {
-            return _linkedThumbnailDropdown.value < StoryUI.CurrentStory.Thumbnails.Count ? 
-                new Choice(_descriptionInputField.text, StoryUI.CurrentStory.Thumbnails[_linkedThumbnailDropdown.value]) : 
-                new Choice(_descriptionInputField.text, null);
+            if (_linkedThumbnailDropdown.value == 0) return new Choice(_descriptionInputField.text, null);
+            return _linkedThumbnailDropdown.value <= StoryUI.CurrentStory.Thumbnails.Count ? 
+                new Choice(_descriptionInputField.text, StoryUI.CurrentStory.Thumbnails[_linkedThumbnailDropdown.value - 1].Guid) : 
+                new Choice(_descriptionInputField.text, string.Empty);
         }
         
         /// <summary>
         /// Update the content of the linked thumbnail dropdown
         /// </summary>
         public void UpdateLinkedThumbnailDropdown() {
-            _linkedThumbnailDropdown.options = new List<TMP_Dropdown.OptionData>();
             foreach (Thumbnail thumbnail in StoryUI.CurrentStory.Thumbnails) {
                 _linkedThumbnailDropdown.options.Add(new TMP_Dropdown.OptionData(thumbnail.Title));
             }

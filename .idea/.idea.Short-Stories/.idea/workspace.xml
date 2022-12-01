@@ -63,10 +63,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="18036">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="18036" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -85,6 +85,7 @@
       <workItem from="1669388068842" duration="3862000" />
       <workItem from="1669639908896" duration="7491000" />
       <workItem from="1669719437492" duration="11222000" />
+      <workItem from="1669887200857" duration="2333000" />
     </task>
     <servers />
   </component>
@@ -107,6 +108,27 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Script/UI/ChoiceUI.cs</url>
+          <line>36</line>
+          <properties documentPath="C:\Users\f.bast\Local Repository\Short-Stories\Assets\Script\UI\ChoiceUI.cs" initialLine="36" containingFunctionPresentation="method 'ToChoice'">
+            <startOffsets>
+              <option value="1384" />
+              <option value="1425" />
+            </startOffsets>
+            <endOffsets>
+              <option value="1424" />
+              <option value="1478" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

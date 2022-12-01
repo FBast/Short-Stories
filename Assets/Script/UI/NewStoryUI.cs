@@ -1,12 +1,12 @@
-﻿using Script.Data;
-using Script.Managers;
+﻿using Script.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.UI {
     public class NewStoryUI : MonoBehaviour {
-        
+
+        [SerializeField] private StoryUI _storyUI;
         [SerializeField] private TMP_InputField _storyNameInputField;
         [SerializeField] private Button _cancelButton;
 
@@ -15,7 +15,8 @@ namespace Script.UI {
         }
 
         public void Confirm() {
-            StoryUI.CurrentStory = new Story(_storyNameInputField.text);
+            _storyUI.New(_storyNameInputField.text);
+            _storyNameInputField.text = string.Empty;
             gameObject.SetActive(false);
         }
 

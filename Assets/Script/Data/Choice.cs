@@ -5,12 +5,12 @@ namespace Script.Data {
     public class Choice {
 
         public string Description;
-        public Thumbnail Link;
+        public string ThumbnailGuid;
 
-        public Choice(string description, Thumbnail link) {
+        public Choice(string description, string thumbnailGuid) {
             Description = description;
-            Link = link;
+            ThumbnailGuid = thumbnailGuid;
         }
-
+        
     }
 }
