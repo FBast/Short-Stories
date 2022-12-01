@@ -18,7 +18,7 @@ namespace Script.UI {
         public void Load(Choice choice) {
             UpdateLinkedThumbnailDropdown();
             _descriptionInputField.text = choice.Description;
-            if (choice.ThumbnailGuid == string.Empty) {
+            if (string.IsNullOrEmpty(choice.ThumbnailGuid)) {
                 _linkedThumbnailDropdown.value = 0;
             }
             else {
